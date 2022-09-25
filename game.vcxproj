@@ -11,7 +11,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="files\src\Background.cpp" />
+    <ClCompile Include="files\src\GameManager.cpp" />
+    <ClCompile Include="files\src\GraphicElement.cpp" />
     <ClCompile Include="files\src\main.cpp" />
+    <ClCompile Include="files\src\Player.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="files\headers\Background.h" />
+    <ClInclude Include="files\headers\GameManager.h" />
+    <ClInclude Include="files\headers\GraphicElement.h" />
+    <ClInclude Include="files\headers\Player.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
