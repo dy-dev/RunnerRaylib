@@ -7,6 +7,7 @@
 #include "Background.h"
 #include "Obstacle.h"
 #include "Rock.h"
+#include "UI.h"
 
 int main(void)
 {
@@ -16,6 +17,8 @@ int main(void)
 	 * GameManager creation (parameter are speed and window size)
 	 */
 	GameManager::getInstance()->setup(8, 800, 400);
+	UI* ui = new UI(GameManager::getInstance()->getWindowSize());
+
 	// NOTE: Textures/Fonts MUST be loaded after Window initialization (OpenGL context is required)
 
 	/**
@@ -30,7 +33,8 @@ int main(void)
 	gameElements.push_back(bg);
 	Player* player = new Player("assets/sprites.png", (float)GameManager::getInstance()->getGameSpeed(), 7, 4);
 	gameElements.push_back(player);
-
+	gameElements.push_back(ui);
+	
 	Rock* obstacle = new Rock("assets/rock.png", (float)GameManager::getInstance()->getGameSpeed());
 	obstacle->setPosition(Vector2Add(GameManager::getInstance()->getPlayerStartingPosition(), { 400, (float)player->getHeight()}));
 	gameElements.push_back(obstacle);

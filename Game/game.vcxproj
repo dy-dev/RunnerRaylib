@@ -11,21 +11,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="files\src\Background.cpp" />
-    <ClCompile Include="files\src\GameManager.cpp" />
-    <ClCompile Include="files\src\GraphicElement.cpp" />
     <ClCompile Include="files\src\main.cpp" />
-    <ClCompile Include="files\src\Obstacle.cpp" />
-    <ClCompile Include="files\src\Player.cpp" />
-    <ClCompile Include="files\src\Rock.cpp" />
+    <ClCompile Include="files\src\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="files\headers\Background.h" />
-    <ClInclude Include="files\headers\GameManager.h" />
-    <ClInclude Include="files\headers\GraphicElement.h" />
-    <ClInclude Include="files\headers\Obstacle.h" />
-    <ClInclude Include="files\headers\Player.h" />
-    <ClInclude Include="files\headers\Rock.h" />
+    <ProjectReference Include="..\GameCoreLib\GameCoreLib.vcxproj">
+      <Project>{bb4d312f-5a08-4e4c-b3b6-a97a1ab03015}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="files\headers\UI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -33,6 +28,7 @@
     <ProjectGuid>{73664756-3f4a-46d6-a6fd-dd0c8c16248b}</ProjectGuid>
     <RootNamespace>raytest2</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Game</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -76,7 +72,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>externals/include;files/headers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>externals/include;files/headers;$(SolutionDir)GameCoreLib/files/headers</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -103,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>externals/include;files/headers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>externals/include;files/headers;$(SolutionDir)GameCoreLib/files/headers</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
