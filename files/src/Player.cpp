@@ -60,6 +60,11 @@ void Player::draw()
 	DrawTextureRec(m_Texture, m_FrameRec, m_Position, WHITE);  // Draw part of the texture
 }
 
+float Player::getHeight()
+{
+	return m_FrameRec.height;
+}
+
 void Player::manageInput()
 {
 	/**

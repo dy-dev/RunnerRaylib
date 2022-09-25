@@ -16,7 +16,7 @@ public:
 
 	const Texture2D& getTexture();
 	const Vector2& getPosition();
-	void setPosition(const Vector2& p_NewPosition);
+	virtual void setPosition(const Vector2& p_NewPosition);
 	void addToPosition(const Vector2& p_PositionOffset);
 	virtual void update() {};
 	virtual void draw();

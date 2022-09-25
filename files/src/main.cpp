@@ -1,9 +1,12 @@
 
 #include <string>
 #include <raylib.h>
+#include <raymath.h>
 #include "GameManager.h"
 #include "Player.h"
 #include "Background.h"
+#include "Obstacle.h"
+#include "Rock.h"
 
 int main(void)
 {
@@ -27,6 +30,10 @@ int main(void)
 	gameElements.push_back(bg);
 	Player* player = new Player("assets/sprites.png", (float)GameManager::getInstance()->getGameSpeed(), 7, 4);
 	gameElements.push_back(player);
+
+	Rock* obstacle = new Rock("assets/rock.png", (float)GameManager::getInstance()->getGameSpeed());
+	obstacle->setPosition(Vector2Add(GameManager::getInstance()->getPlayerStartingPosition(), { 400, (float)player->getHeight()}));
+	gameElements.push_back(obstacle);
 
 	/**
 	 * Game manager setup

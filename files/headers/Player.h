@@ -16,7 +16,7 @@ public:
 	Player(const std::string& p_Texture, float p_Speed, int p_iNbColumns, int p_iNbLines);
 	virtual void update() override;
 	virtual void draw() override;
-
+	float getHeight();
 	void manageInput();
 };
 

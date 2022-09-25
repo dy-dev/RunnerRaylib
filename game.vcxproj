@@ -15,13 +15,17 @@
     <ClCompile Include="files\src\GameManager.cpp" />
     <ClCompile Include="files\src\GraphicElement.cpp" />
     <ClCompile Include="files\src\main.cpp" />
+    <ClCompile Include="files\src\Obstacle.cpp" />
     <ClCompile Include="files\src\Player.cpp" />
+    <ClCompile Include="files\src\Rock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="files\headers\Background.h" />
     <ClInclude Include="files\headers\GameManager.h" />
     <ClInclude Include="files\headers\GraphicElement.h" />
+    <ClInclude Include="files\headers\Obstacle.h" />
     <ClInclude Include="files\headers\Player.h" />
+    <ClInclude Include="files\headers\Rock.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
