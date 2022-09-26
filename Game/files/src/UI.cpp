@@ -8,10 +8,15 @@ UI::UI(const Vector2& p_ScreenDimension)
 {
 }
 
+void UI::update()
+{
+	m_iScore = GameManager::getInstance()->getPlayer()->getScore();
+}
+
 void UI::draw()
 {
-	int score = GameManager::getInstance()->getPlayer()->getScore();
-	std::string playerScore = "  Score : " + std::to_string(score);
+
+	std::string playerScore = "  Score : " + std::to_string(m_iScore);
 	auto measure = MeasureTextEx(m_Font, playerScore.c_str(), 40, 2);
 	DrawRectangle(15,25, measure.x, measure.y, Fade(BLACK, 0.6f));
 	DrawTextEx(m_Font, playerScore.c_str(),{ 20.0f, 30.0f }, (float)32, 2, YELLOW);

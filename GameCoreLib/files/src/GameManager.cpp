@@ -1,6 +1,9 @@
 #include "GameManager.h"
 #include "Player.h"
+#include "Background.h"
+#include "Rock.h"
 
+#include <raymath.h>
 
 #include <windows.h>
 #include <stdio.h>
@@ -18,7 +21,8 @@ Vector2 GameManager::m_PlayerStartingPosition = { 0,0 };
 GameManager* GameManager::s_pGameManager = nullptr;
 Player* GameManager::s_pPlayer = nullptr;
 GraphicElement* GameManager::s_tmp = nullptr;
-
+std::vector<GraphicElement*> GameManager::s_GameElements;
+std::vector<int> GameManager::s_IndexesGameElementsToDelete;
 /************************************************************************/
 /* REPLICATION MANAGEMENT                                               */
 /************************************************************************/
@@ -72,28 +76,86 @@ void GameManager::setup(int p_iGameSpeed, int p_iScreenWidth, int p_iScreenHeigh
 	s_ScreenSize = { (float)p_iScreenWidth, (float)p_iScreenHeight };
 	m_PlayerStartingPosition = Vector2{ 50.0f, 240.0f };
 
-	InitWindow(s_ScreenSize.x, s_ScreenSize.y, "Empty");
+	InitWindow((int)s_ScreenSize.x, (int)s_ScreenSize.y, "Empty");
 	s_tmp = new GraphicElement("assets/rock.png", 1);
-
+	prepareGame();
 }
 
-void GameManager::setTargetFrameRate(int p_iFPS)
+void GameManager::prepareGame()
 {
-	s_iFPS = p_iFPS;
+	/**
+	 * The background and the player are instanced and added to the list
+	 */
+	Background* bg = new Background("assets/desert_BG.png", (float)GameManager::getInstance()->getGameSpeed());
+	s_GameElements.push_back(bg);
+	s_pPlayer = new Player("assets/sprites.png", (float)GameManager::getInstance()->getGameSpeed(), 7, 4);
+	s_GameElements.push_back(s_pPlayer);
+
+
+	s_iFPS = 60;
 	SetTargetFPS(s_iFPS);               // Set our game to run at 60 frames-per-second
 }
 
-void GameManager::setPlayer(Player* p_pPlayer)
-{
-	s_pPlayer = p_pPlayer;
-}
-
-void GameManager::manageInputs()
+void GameManager::manageGame()
 {
 	manageGameSpeed();
 	manageReplication();
 	s_pPlayer->manageInput();
 	s_tmp->addToPosition(Vector2{ 1,1 });
+
+	/**
+	 * update each element
+	 */
+	if (rand() % 100 > 95)
+	{
+		Rock* obstacle = new Rock("assets/rock.png", (float)GameManager::getInstance()->getGameSpeed());
+		auto pos = s_GameElements[s_GameElements.size() - 1]->getPosition();
+		auto tmppos = Vector2Add({ pos.x,getPlayerStartingPosition().y }, { 850.f + rand() % 100, (float)s_pPlayer->getHeight() });
+		obstacle->setPosition(tmppos);
+
+		s_GameElements.push_back(obstacle);
+	}
+	int i = 0;
+	for (auto element : s_GameElements)
+	{
+		Obstacle* obs = dynamic_cast<Obstacle*>(element);
+		if (obs) {
+			if (obs->isOffScreen())
+			{
+				s_IndexesGameElementsToDelete.push_back(i);
+			}
+			else
+			{
+				if (obs->getState() == EObstacleState::ON && s_pPlayer->isColliding(obs))
+				{
+					s_pPlayer->addPoints(-1);
+					obs->setState(EObstacleState::COLLIDED);
+				}
+			}
+		}
+		element->update();
+		i++;
+	}
+	for (int i = s_IndexesGameElementsToDelete.size() - 1; i >= 0; i--)
+	{
+		auto elmtIndex = s_IndexesGameElementsToDelete[i];
+		GraphicElement* element = s_GameElements[elmtIndex];
+		Obstacle* obs = dynamic_cast<Obstacle*>(element);
+		if (obs && obs->getState() == EObstacleState::ON)
+			s_pPlayer->addPoints(1);
+
+		s_GameElements.erase(s_GameElements.begin() + elmtIndex);
+		delete element;
+	}
+	s_IndexesGameElementsToDelete.clear();
+}
+
+void GameManager::drawElements()
+{
+	for (auto element : s_GameElements)
+	{
+		element->draw();
+	}
 }
 
 const Vector2& GameManager::getWindowSize()
@@ -104,6 +166,14 @@ const Vector2& GameManager::getWindowSize()
 const Player* GameManager::getPlayer()
 {
 	return s_pPlayer;
+}
+
+void GameManager::uninitialise()
+{
+	for (auto element : s_GameElements)
+	{
+		element->unloadTexture();
+	}
 }
 
 int GameManager::getGameSpeed()
@@ -122,8 +192,8 @@ void GameManager::manageGameSpeed()
 
 void GameManager::manageReplication()
 {
-	std::wstring szMsg = std::to_wstring ((unsigned long long)s_tmp);
-	if(pBuf)
+	std::wstring szMsg = std::to_wstring((unsigned long long)s_tmp);
+	if (pBuf)
 		CopyMemory((PVOID)pBuf, szMsg.c_str(), (_tcslen(szMsg.c_str()) * sizeof(TCHAR)));
 }
 

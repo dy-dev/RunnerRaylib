@@ -8,6 +8,8 @@ class GraphicElement
 protected:
 	Texture2D m_Texture;
 	Vector2 m_Position;
+	float m_fWidth;
+	float m_fHeight;
 	float m_fSpeed;
 
 public:
@@ -21,6 +23,8 @@ public:
 	void addToPosition(const Vector2& p_PositionOffset);
 	virtual void update() {};
 	virtual void draw();
+	float getWidth();
+	float getHeight();
 
 	void unloadTexture();
 };

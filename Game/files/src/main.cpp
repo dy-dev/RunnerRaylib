@@ -16,34 +16,11 @@ int main(void)
 	/**
 	 * GameManager creation (parameter are speed and window size)
 	 */
+	// NOTE: Textures/Fonts MUST be loaded after Window initialization (OpenGL context is required)
 	GameManager::getInstance()->setup(8, 800, 400);
+	
 	UI* ui = new UI(GameManager::getInstance()->getWindowSize());
 
-	// NOTE: Textures/Fonts MUST be loaded after Window initialization (OpenGL context is required)
-
-	/**
-	 * Every graphics element that will need to be updated and drawn on screen
-	 */
-	std::vector<GraphicElement*> gameElements;
-
-	/**
-	 * The background and the player are instanced and added to the list
-	 */
-	Background* bg = new Background("assets/desert_BG.png", (float)GameManager::getInstance()->getGameSpeed());
-	gameElements.push_back(bg);
-	Player* player = new Player("assets/sprites.png", (float)GameManager::getInstance()->getGameSpeed(), 7, 4);
-	gameElements.push_back(player);
-	gameElements.push_back(ui);
-	
-	Rock* obstacle = new Rock("assets/rock.png", (float)GameManager::getInstance()->getGameSpeed());
-	obstacle->setPosition(Vector2Add(GameManager::getInstance()->getPlayerStartingPosition(), { 400, (float)player->getHeight()}));
-	gameElements.push_back(obstacle);
-
-	/**
-	 * Game manager setup
-	 */
-	GameManager::getInstance()->setPlayer(player);
-	GameManager::getInstance()->setTargetFrameRate(60);
 									//--------------------------------------------------------------------------------------
 									// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -53,16 +30,8 @@ int main(void)
 		//----------------------------------------------------------------------------------
 
 		// Send the input management to the game manager
-		GameManager::getInstance()->manageInputs();
-		
-		/**
-		 * update each element
-		 */
-		for (auto element : gameElements)
-		{
-			element->update();
-		}
-
+		GameManager::getInstance()->manageGame();
+		ui->update();
 		
 		//----------------------------------------------------------------------------------
 		// Draw
@@ -73,11 +42,9 @@ int main(void)
 		/**
 		 * draw each element
 		 */
-		for (auto element : gameElements)
-		{
-			element->draw();
-		}
-		
+		GameManager::getInstance()->drawElements();
+		ui->draw();
+
 		EndDrawing();
 		//----------------------------------------------------------------------------------
 	}
@@ -85,10 +52,7 @@ int main(void)
 	//--------------------------------------------------------------------------------------
 	// De-Initialization
 	//--------------------------------------------------------------------------------------
-	for (auto element : gameElements)
-	{
-		element->unloadTexture();
-	}
+	GameManager::getInstance()->uninitialise();
 
 	Ray_CloseWindow();              // Close window and OpenGL context
 	return 0;

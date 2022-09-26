@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "Player.h"
+#include "Obstacle.h"
 
 Player::Player(const std::string& p_Texture, float p_Speed, int p_iNbColumns, int p_iNbLines)
 	: GraphicElement(p_Texture, GameManager::getInstance()->getPlayerStartingPosition(), p_Speed)
@@ -81,4 +82,15 @@ void Player::manageInput()
 int Player::getScore() const 
 {
 	return m_iScore;
+}
+
+bool Player::isColliding(Obstacle* p_pObstacle)
+{
+	return CheckCollisionRecs({ getPosition().x, getPosition().y, m_FrameRec.width - 8, m_FrameRec.height - 8 },
+			{ p_pObstacle->getPosition().x,p_pObstacle->getPosition().y,p_pObstacle->getWidth() - 8, p_pObstacle->getHeight() - 8 });
+}
+
+void Player::addPoints(int p_iPoints)
+{
+	m_iScore += p_iPoints;
 }

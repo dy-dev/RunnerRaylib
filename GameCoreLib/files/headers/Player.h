@@ -1,6 +1,7 @@
 #pragma once
 #include "GraphicElement.h"
 
+class Obstacle;
 class Player :
     public GraphicElement
 {
@@ -20,5 +21,7 @@ public:
 	float getHeight();
 	void manageInput();
 	int getScore() const;
+	bool isColliding(Obstacle* p_pObstacle);
+	void addPoints(int p_iPoints);
 };
 
