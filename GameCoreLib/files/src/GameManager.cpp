@@ -119,7 +119,8 @@ void GameManager::manageGame()
 	for (auto element : s_GameElements)
 	{
 		Obstacle* obs = dynamic_cast<Obstacle*>(element);
-		if (obs) {
+		if (obs)
+		{
 			if (obs->isOffScreen())
 			{
 				s_IndexesGameElementsToDelete.push_back(i);
@@ -201,6 +202,50 @@ void GameManager::endReplication()
 {
 	UnmapViewOfFile(pBuf);
 	CloseHandle(hMapFile);
+}
+
+void GameManager::playGame(std::function<void()> update , std::function<void()> draw)
+{
+	//--------------------------------------------------------------------------------------
+									// Main game loop
+	while (!WindowShouldClose())    // Detect window close button or ESC key
+	{
+		//----------------------------------------------------------------------------------
+		// Update
+		//----------------------------------------------------------------------------------
+
+		// Send the input management to the game manager
+		GameManager::getInstance()->manageGame();
+		if(update)
+			update();
+
+		//----------------------------------------------------------------------------------
+		// Draw
+		//----------------------------------------------------------------------------------
+		BeginDrawing();
+		ClearBackground(RAYWHITE);
+
+		/**
+		 * draw each element
+		 */
+		GameManager::getInstance()->drawElements();
+		if (draw)
+			draw();
+
+		EndDrawing();
+		//----------------------------------------------------------------------------------
+	}
+}
+
+void GameManager::freeResources()
+{
+
+	delete s_pPlayer;
+	//--------------------------------------------------------------------------------------
+	// De-Initialization
+	//--------------------------------------------------------------------------------------
+	// Close window and OpenGL context
+	Ray_CloseWindow();
 }
 
 const Vector2& GameManager::getPlayerStartingPosition()

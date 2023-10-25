@@ -9,6 +9,10 @@
 #include "Rock.h"
 #include "UI.h"
 
+
+#define DEBUG_LOG(text) DrawText(text, 300,200,48,RED);
+ 
+
 int main(void)
 {
 	// Initialization
@@ -20,40 +24,12 @@ int main(void)
 	GameManager::getInstance()->setup(8, 800, 400);
 	
 	UI* ui = new UI(GameManager::getInstance()->getWindowSize());
-
-									//--------------------------------------------------------------------------------------
-									// Main game loop
-	while (!WindowShouldClose())    // Detect window close button or ESC key
-	{
-		//----------------------------------------------------------------------------------
-		// Update
-		//----------------------------------------------------------------------------------
-
-		// Send the input management to the game manager
-		GameManager::getInstance()->manageGame();
-		ui->update();
-		
-		//----------------------------------------------------------------------------------
-		// Draw
-		//----------------------------------------------------------------------------------
-		BeginDrawing();
-		ClearBackground(RAYWHITE);
-		
-		/**
-		 * draw each element
-		 */
-		GameManager::getInstance()->drawElements();
-		ui->draw();
-
-		EndDrawing();
-		//----------------------------------------------------------------------------------
-	}
-
-	//--------------------------------------------------------------------------------------
-	// De-Initialization
-	//--------------------------------------------------------------------------------------
+	//();
+	//ui->update();
+	GameManager::getInstance()->playGame(std::bind(&UI::update, ui), std::bind(&UI::draw, ui));
+	GameManager::getInstance()->freeResources();
 	GameManager::getInstance()->uninitialise();
 
-	Ray_CloseWindow();              // Close window and OpenGL context
+	             
 	return 0;
 }

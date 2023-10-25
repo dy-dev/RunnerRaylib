@@ -1,6 +1,7 @@
 #pragma once
 #include <raylib.h>
 #include <vector>
+#include <functional>
 
 class Player;
 class GraphicElement;
@@ -29,6 +30,7 @@ private:
 	static void manageGameSpeed();
 	static void manageReplication();
 	static void endReplication();
+	
 
 public:
 	static GameManager* getInstance();
@@ -38,7 +40,8 @@ public:
 	static void manageGame();
 	static void drawElements();
 	static void uninitialise();
-
+	static void playGame(std::function<void ()> update = nullptr, std::function<void ()> draw = nullptr);
+	static void freeResources();
 
 	static const Vector2& getWindowSize();
 	static const Player* getPlayer();
